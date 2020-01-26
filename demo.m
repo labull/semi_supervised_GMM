@@ -2,6 +2,7 @@
 % Code written by Lawrence Bull
 clearvars
 close all; clc;
+addpath('MoChen_logPdf') % add Mo Chen's log pdf code
 
 %% load training and test data
 load('data.mat') % the simulated data from the MSSP paper
@@ -12,7 +13,7 @@ load('data.mat') % the simulated data from the MSSP paper
 Y = unique(y); % label space
 % split into labelled unlabelled sets
 N = size(x,1);
-n = floor(.05*N); % no# labelled data (5 % of training data)
+n = floor(.03*N); % no# labelled data (3 % of training data)
 m = size(x,1) - n; % no# of unlabelled data
 idx = sort(randperm(N,n));
 x_l = x(idx,:); % labelled observations
@@ -22,11 +23,11 @@ x_u = x(setdiff(1:N, idx),:); % unlabelled observations (hidden labels)
 k = length(unique(Y));
 
 figure(1);
-CLR = colormap(brewermap(length(unique(Y)),'dark2'));
+CLR = hsv(k);
 % plot the labelled/unlabelled/test subsets
 % labelled data - colour markers
 % unlabelled data - black markers
-% test data - red markers
+% test data - (small) red markers
 s0 = scatter(x_test(:,1), x_test(:,2), 10, 'r.');
 hold on;
 s1 = scatter(x_u(:,1),x_u(:,2),9,'k.');
@@ -42,7 +43,6 @@ hold off;
 %% learn the classifier given the labelled data only
 
 [mu_n, k_n, v_n, S_n, lamda, SigMAP, muMAP] = BCMG_train(x_l, y_l);
-
 % plot the model given the supervised data *only*
 figure(2);
 s1 = gscatter(x_l(:,1),x_l(:,2),y_l,CLR,'.',10); hold on; % labelled data
@@ -57,6 +57,12 @@ legend(s1, {'1','2','3','4','5','6'},...
 xlim([-25 15]);ylim([-12 12]);
 xlabel('x_i^{(1)}');ylabel('x_i^{(2)}')
 hold off;
+
+% predict
+[y_pred] = BCMG_predict(x_test, mu_n, k_n, v_n, S_n, lamda);
+% accuracy
+acc1 = sum(y_pred == y_test)/size(y_test,1);
+fprintf('supervised accuracy: %.2f\n', acc1)
 
 %% update GMM using the unlabelled data
 
@@ -85,4 +91,14 @@ legend([sl;su], {'1','2','3','4','5','6','{x}_{ui}'},...
 xlim([-25 15]);ylim([-12 12]);
 xlabel('x_i^{(1)}');ylabel('x_i^{(2)}')
 hold off;
+
+% predict
+[y_pred] = BCMG_predict(x_test, mu_nu, k_nu, v_nu, S_nu, lamda_u);
+% accuracy
+acc2 = sum(y_pred == y_test)/size(y_test,1);
+fprintf('semi-supervised accuracy: %.2f\n', acc2)
+
+% performance increase through semi-supervised learning
+% accuracy
+fprintf('accuracy increase: %.2f%%\n', 100*(acc2-acc1))
 

@@ -30,7 +30,7 @@ end
 [~, y_pred] = max(lpy_xD,[],2);
 py_xD = exp(lpy_xD);
 
-% POSTERIOR PREDICTIVE OF THE MODEL: p(x* | D) *** put in the log space
+% POSTERIOR PREDICTIVE OF THE MODEL: p(x* | D)
 px_D = NaN(size(xtest,1),1);
 for i = 1:size(xtest,1)
     px_D(i, :) = sum(px_yD(i,:).*py_D);
