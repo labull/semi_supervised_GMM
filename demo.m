@@ -53,9 +53,10 @@ end
 plot_clusters2([0,0], eye(2)) % plot the prior
 hold off;
 legend(s1, {'1','2','3','4','5','6'},...
-    'location', 'northoutside', 'orientation', 'horizontal','box','off');
+    'location', 'south', 'orientation', 'horizontal','box','off');
 xlim([-25 15]);ylim([-12 12]);
 xlabel('x_i^{(1)}');ylabel('x_i^{(2)}')
+title('supervised GMM')
 hold off;
 
 % predict
@@ -87,9 +88,10 @@ end
 plot_clusters2([0,0], eye(2)) % plot the prior
 hold off;
 legend([sl;su], {'1','2','3','4','5','6','{x}_{ui}'},...
-    'location', 'northoutside', 'orientation', 'horizontal','box','off');
+    'location', 'south', 'orientation', 'horizontal','box','off');
 xlim([-25 15]);ylim([-12 12]);
 xlabel('x_i^{(1)}');ylabel('x_i^{(2)}')
+title('semi-supervised GMM')
 hold off;
 
 % predict
