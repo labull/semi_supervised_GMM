@@ -1,7 +1,7 @@
 # Semi-supervised Gaussian Mixture Model [MATLAB]
 
 * Semi-supervised Gaussian Mixture Model, for density estimation and classification, implemented in MATLAB.
-* The code reproduces the example from this [MSSP paper](link).
+* The code reproduces the example from this [MSSP paper](https://www.sciencedirect.com/science/article/pii/S088832702030039X).
 
 If you find any bugs/errors, get in contact via the issues tab.
 
